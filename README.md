@@ -6,3 +6,6 @@ Add them to your .bash_profile or .bashrc file in the following way:
 
     export OKCOIN_API_KEY=your okcoin api key goes here
     export OKCOIN_SECRET_KEY=your okcoin secret key goes here
+
+
+View the OKCoin REST API here: https://www.okcoin.com/about/rest_api.do
