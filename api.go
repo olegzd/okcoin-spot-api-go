@@ -97,7 +97,7 @@ func getSpotPrice(symbol string, target *SpotPrice) error {
 }
 
 // getAccountInfo fetches account info and populates target with result
-func (a *Account) getAccountInfo(target *Info) (resp *http.Response) {
+func (a *Account) getAccountInfo(target *Info) {
 
 	// Generate sign
 	signature := generateSign(map[string]string{"api_key": a.APIKey}, a.SecretKey)
@@ -112,7 +112,10 @@ func (a *Account) getAccountInfo(target *Info) (resp *http.Response) {
 	if error != nil {
 		panic(error)
 	}
-	return response
+
+	// Unmarshal the response body
+	json.NewDecoder(response.Body).Decode(target)
+
 }
 
 // generateSign takes in a set of params (map of string:string) and
