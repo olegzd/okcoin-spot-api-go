@@ -27,5 +27,7 @@ func TestAccountInfo(t *testing.T) {
 
 	// Get account info
 	info := Info{}
-	account.getAccountInfo(&info)
+	var response = account.getAccountInfo(&info)
+
+	t.Logf(response.Status)
 }

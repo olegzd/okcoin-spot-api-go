@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"net/http"
+	"net/url"
 	"sort"
 	"strings"
 )
@@ -96,17 +97,27 @@ func getSpotPrice(symbol string, target *SpotPrice) error {
 }
 
 // getAccountInfo fetches account info and populates target with result
-func (a *Account) getAccountInfo(target *Info) {
-	var params = make(map[string]string)
-	params["api_key"] = a.APIKey
+func (a *Account) getAccountInfo(target *Info) (resp *http.Response) {
 
 	// Generate sign
-	// generateSign(params)
+	signature := generateSign(map[string]string{"api_key": a.APIKey}, a.SecretKey)
+	values := url.Values{}
+
+	values.Add("api_key", a.APIKey)
+	values.Add("sign", signature)
+
+	response, error := http.PostForm("https://www.okcoin.com/api/v1/userinfo.do", values)
+
+	// Check for errors and panic if one arose
+	if error != nil {
+		panic(error)
+	}
+	return response
 }
 
 // generateSign takes in a set of params (map of string:string) and
 // returns an MD5 hash signature
-func generateSign(params map[string]string, privateKey string) (signature string) {
+func generateSign(params map[string]string, secretKey string) (signature string) {
 	// Get the keys into an array, then sort it
 	var keys = make([]string, len(params))
 
@@ -123,7 +134,7 @@ func generateSign(params map[string]string, privateKey string) (signature string
 	}
 
 	// Add the private key to the signature
-	signature += "secret_key=" + privateKey
+	signature += "secret_key=" + secretKey
 
 	// MD5 Hash the signature
 	hasher := md5.New()
