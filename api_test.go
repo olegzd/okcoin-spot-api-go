@@ -23,10 +23,13 @@ func TestAccountInfo(t *testing.T) {
 	var apiSecretKey = os.Getenv("OKCOIN_SECRET_KEY")
 
 	var account = Account{apiKey, apiSecretKey}
-	// var keys = map[string]string{"api_key": account.APIKey}
 
-	// Get account info
-	info := Info{}
-	account.getAccountInfo(&info)
+	foo := AccountInfo{}
+	account.getAccountInfo(&foo)
+
+	// Sample prints
+	t.Logf("Result: %t\n", foo.Result)
+	t.Logf("Result: %s\n", foo.Info.Fund.Asset.Net)
+	t.Logf("Result: %s\n", foo.Info.Fund.Asset.Total)
 
 }

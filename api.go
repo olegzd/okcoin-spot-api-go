@@ -14,6 +14,12 @@ const (
 	api = "https://www.okcoin.com/api/v1/"
 )
 
+// AcountInfo is the main struct containing response info from API
+type AccountInfo struct {
+	Info   Info `json:"info"`
+	Result bool `json:"result"`
+}
+
 // Account contains the keys necessary to access the OKCoin API
 type Account struct {
 	APIKey    string
@@ -97,9 +103,9 @@ func getSpotPrice(symbol string, target *SpotPrice) error {
 }
 
 // getAccountInfo fetches account info and populates target with result
-func (a *Account) getAccountInfo(target *Info) {
+func (a *Account) getAccountInfo(target *AccountInfo) {
 
-	// Generate sign
+	// Generate sign and prepare POST params
 	signature := generateSign(map[string]string{"api_key": a.APIKey}, a.SecretKey)
 	values := url.Values{}
 
@@ -108,14 +114,11 @@ func (a *Account) getAccountInfo(target *Info) {
 
 	response, error := http.PostForm("https://www.okcoin.com/api/v1/userinfo.do", values)
 
-	// Check for errors and panic if one arose
+	// Check for errors and panic if one arose, otherwise populate target
 	if error != nil {
 		panic(error)
 	}
-
-	// Unmarshal the response body
 	json.NewDecoder(response.Body).Decode(target)
-
 }
 
 // generateSign takes in a set of params (map of string:string) and
