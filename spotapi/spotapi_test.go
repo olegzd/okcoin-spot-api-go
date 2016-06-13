@@ -7,10 +7,10 @@ import (
 
 func TestSpotPrice(t *testing.T) {
 
-	// Test that getSpotPrice correctly calls
+	// Test that GetSpotPrice correctly calls
 	var sp = SpotPrice{}
 
-	getSpotPrice("ltc_usd", &sp)
+	GetSpotPrice("ltc_usd", &sp)
 
 	t.Logf("Ticker date: %s\n", sp.Date)
 	t.Logf("Ticker high: %s\n", sp.Ticker.High)
@@ -26,7 +26,7 @@ func TestAccountInfo(t *testing.T) {
 
 	// Get account info (populate via Info struct)
 	info := AccountInfo{}
-	account.getAccountInfo(&info)
+	account.GetAccountInfo(&info)
 
 	// Print out account info
 	t.Logf("Result status: %t\n", info.Result)

@@ -19,6 +19,12 @@ const (
 	api = "https://www.okcoin.com/api/v1/"
 )
 
+// Trade is the response struct used when user places spot order
+type Trade struct {
+	Result  bool   `json:"result"`
+	OrderID string `json:"order_id"`
+}
+
 // AccountInfo is the main struct containing response info from API
 type AccountInfo struct {
 	Info   Info `json:"info"`
@@ -90,10 +96,10 @@ type Ticker struct {
 	Vol string `json:"vol"`
 }
 
-// getSpotPrice gets the current spot price from API
+// GetSpotPrice gets the current spot price from API
 // depending on the symbol. symbol can either be 'ltc_usd' or
 // 'btc_usd' ; anything else results in btc_usd
-func getSpotPrice(symbol string, target *SpotPrice) error {
+func GetSpotPrice(symbol string, target *SpotPrice) error {
 	url := api + "ticker.do?symbol=" + symbol
 	resp, err := http.Get(url)
 	defer resp.Body.Close()
@@ -107,11 +113,11 @@ func getSpotPrice(symbol string, target *SpotPrice) error {
 	return nil
 }
 
-// getAccountInfo fetches account info and populates target with result
-func (a *Account) getAccountInfo(target *AccountInfo) {
+// GetAccountInfo fetches account info and populates target with result
+func (a *Account) GetAccountInfo(target *AccountInfo) {
 
 	// Generate sign and prepare POST params
-	signature := generateSign(map[string]string{"api_key": a.APIKey}, a.SecretKey)
+	signature := GenerateSign(map[string]string{"api_key": a.APIKey}, a.SecretKey)
 	values := url.Values{}
 
 	values.Add("api_key", a.APIKey)
@@ -126,9 +132,9 @@ func (a *Account) getAccountInfo(target *AccountInfo) {
 	json.NewDecoder(response.Body).Decode(target)
 }
 
-// generateSign takes in a set of params (map of string:string) and
+// GenerateSign takes in a set of params (map of string:string) and
 // returns an MD5 hash signature
-func generateSign(params map[string]string, secretKey string) (signature string) {
+func GenerateSign(params map[string]string, secretKey string) (signature string) {
 	// Get the keys into an array, then sort it
 	var keys = make([]string, len(params))
 
