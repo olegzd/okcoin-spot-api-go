@@ -1,4 +1,4 @@
-package okcoin
+package spotapi
 
 import (
 	"os"
@@ -24,12 +24,14 @@ func TestAccountInfo(t *testing.T) {
 
 	var account = Account{apiKey, apiSecretKey}
 
-	foo := AccountInfo{}
-	account.getAccountInfo(&foo)
+	// Get account info (populate via Info struct)
+	info := AccountInfo{}
+	account.getAccountInfo(&info)
 
-	// Sample prints
-	t.Logf("Result: %t\n", foo.Result)
-	t.Logf("Result: %s\n", foo.Info.Fund.Asset.Net)
-	t.Logf("Result: %s\n", foo.Info.Fund.Asset.Total)
-
+	// Print out account info
+	t.Logf("Result status: %t\n", info.Result)
+	t.Logf("info.Info.Fund.Asset.Total: %s\n", info.Info.Fund.Asset.Total)
+	t.Logf("info.Info.Fund.Borrow.USD: %s\n", info.Info.Fund.Borrow.USD)
+	t.Logf("info.Info.Fund.Free.USD: %s\n", info.Info.Fund.Free.USD)
+	//... and etc.
 }

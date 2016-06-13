@@ -1,4 +1,9 @@
-package okcoin
+/* Package spotapi provides OKCoin's Spot trading/price API.
+ * More of the documentation can be found here:
+ * https://www.okcoin.com/about/rest_api.do
+ */
+
+package spotapi
 
 import (
 	"crypto/md5"
@@ -14,7 +19,7 @@ const (
 	api = "https://www.okcoin.com/api/v1/"
 )
 
-// AcountInfo is the main struct containing response info from API
+// AccountInfo is the main struct containing response info from API
 type AccountInfo struct {
 	Info   Info `json:"info"`
 	Result bool `json:"result"`
